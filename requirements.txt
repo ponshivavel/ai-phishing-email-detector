@@ -1,0 +1,12 @@
+streamlit
+scikit-learn
+pandas
+pickle5
+nltk
+tldextract
+python-Levenshtein
+fastapi
+uvicorn[standard]
+nltk
+requests
+
