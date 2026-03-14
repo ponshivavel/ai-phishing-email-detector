@@ -1,11 +1,10 @@
+fastapi
+uvicorn[standard]
 streamlit
 scikit-learn
 pandas
+numpy
 nltk
 tldextract
 python-Levenshtein
-fastapi
-uvicorn[standard]
-nltk
 requests
-
