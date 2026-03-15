@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>AI Phishing Detector</title>
+
+<style>
+
+body{
+font-family: Arial;
+background:#f4f6f8;
+display:flex;
+justify-content:center;
+align-items:center;
+height:100vh;
+}
+
+.container{
+background:white;
+padding:30px;
+width:500px;
+border-radius:10px;
+box-shadow:0 5px 15px rgba(0,0,0,0.2);
+}
+
+textarea{
+width:100%;
+height:150px;
+padding:10px;
+}
+
+button{
+width:100%;
+padding:12px;
+margin-top:10px;
+background:#007BFF;
+color:white;
+border:none;
+border-radius:5px;
+font-size:16px;
+}
+
+.result{
+margin-top:20px;
+padding:10px;
+background:#f1f1f1;
+border-radius:5px;
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+<h2>AI Phishing Email Detector</h2>
+
+<textarea id="email" placeholder="Paste email text here"></textarea>
+
+<button onclick="analyze()">Analyze Email</button>
+
+<div class="result" id="output"></div>
+
+</div>
+
+<script>
+
+async function analyze(){
+
+let email = document.getElementById("email").value;
+
+let response = await fetch(
+"https://ai-phishing-email-detector-mhtd.onrender.com/analyze-email",
+{
+method:"POST",
+headers:{
+"Content-Type":"application/json"
+},
+body:JSON.stringify({
+email_text:email
+})
+});
+
+let data = await response.json();
+
+document.getElementById("output").innerHTML =
+
+"Prediction: "+data.prediction+"<br>"+
+"Risk Score: "+data.risk_score+"<br>"+
+"ML Probability: "+data.ml_probability;
+
+}
+
+</script>
+
+</body>
+</html>
