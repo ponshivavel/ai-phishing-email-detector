@@ -1,0 +1,18 @@
+# Datasets
+data/*.csv
+data/*.pkl
+
+# Model artifacts
+model/*.pkl
+
+# Environment
+.venv/
+__pycache__/
+*.pyc
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log

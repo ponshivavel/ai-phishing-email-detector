@@ -1,5 +1,6 @@
 import re
 import nltk
+import os
 from nltk.corpus import stopwords
 from nltk.tokenize import word_tokenize
 from nltk.stem import PorterStemmer
@@ -7,13 +8,28 @@ import tldextract
 import Levenshtein
 from typing import List, Tuple, Dict
 
-# Download required NLTK data (run once)
+# Render-safe NLTK setup
+NLTK_PATH = "/opt/render/nltk_data"
+
+if not os.path.exists(NLTK_PATH):
+    os.makedirs(NLTK_PATH)
+
+nltk.data.path.append(NLTK_PATH)
+
 try:
-    nltk.data.find('tokenizers/punkt')
-    nltk.data.find('corpora/stopwords')
+    nltk.data.find("tokenizers/punkt")
 except LookupError:
-    nltk.download('punkt')
-    nltk.download('stopwords')
+    nltk.download("punkt", download_dir=NLTK_PATH)
+
+try:
+    nltk.data.find("corpora/stopwords")
+except LookupError:
+    nltk.download("stopwords", download_dir=NLTK_PATH)
+
+try:
+    nltk.data.find('tokenizers/punkt_tab')
+except LookupError:
+    nltk.download('punkt_tab', download_dir=NLTK_PATH)
 
 STOP_WORDS = set(stopwords.words('english'))
 STEMMER = PorterStemmer()
