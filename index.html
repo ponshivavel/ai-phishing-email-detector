@@ -1,17 +1,20 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-<title>AI Phishing Detector</title>
+
+<meta charset="UTF-8">
+<title>AI Phishing Email Detector</title>
 
 <style>
 
 body{
-font-family: Arial;
-background:#f4f6f8;
+font-family: Arial, sans-serif;
+background:#f4f6f9;
 display:flex;
 justify-content:center;
 align-items:center;
 height:100vh;
+margin:0;
 }
 
 .container{
@@ -19,34 +22,58 @@ background:white;
 padding:30px;
 width:500px;
 border-radius:10px;
-box-shadow:0 5px 15px rgba(0,0,0,0.2);
+box-shadow:0 5px 20px rgba(0,0,0,0.2);
+}
+
+h2{
+text-align:center;
+margin-bottom:20px;
 }
 
 textarea{
 width:100%;
 height:150px;
 padding:10px;
+font-size:14px;
+border-radius:5px;
+border:1px solid #ccc;
 }
 
 button{
 width:100%;
+margin-top:15px;
 padding:12px;
-margin-top:10px;
+font-size:16px;
 background:#007BFF;
 color:white;
 border:none;
 border-radius:5px;
-font-size:16px;
+cursor:pointer;
+}
+
+button:hover{
+background:#0056b3;
 }
 
 .result{
 margin-top:20px;
-padding:10px;
-background:#f1f1f1;
-border-radius:5px;
+padding:15px;
+border-radius:6px;
+display:none;
+}
+
+.safe{
+background:#d4edda;
+color:#155724;
+}
+
+.phishing{
+background:#f8d7da;
+color:#721c24;
 }
 
 </style>
+
 </head>
 
 <body>
@@ -55,19 +82,24 @@ border-radius:5px;
 
 <h2>AI Phishing Email Detector</h2>
 
-<textarea id="email" placeholder="Paste email text here"></textarea>
+<textarea id="emailText" placeholder="Paste email content here..."></textarea>
 
-<button onclick="analyze()">Analyze Email</button>
+<button onclick="analyzeEmail()">Analyze Email</button>
 
-<div class="result" id="output"></div>
+<div id="resultBox" class="result"></div>
 
 </div>
 
 <script>
 
-async function analyze(){
+async function analyzeEmail(){
 
-let email = document.getElementById("email").value;
+let email = document.getElementById("emailText").value;
+
+if(email.trim() === ""){
+alert("Please enter email content");
+return;
+}
 
 let response = await fetch(
 "https://ai-phishing-email-detector-mhtd.onrender.com/analyze-email",
@@ -77,17 +109,30 @@ headers:{
 "Content-Type":"application/json"
 },
 body:JSON.stringify({
-email_text:email
+email_text: email
 })
 });
 
 let data = await response.json();
 
-document.getElementById("output").innerHTML =
+let resultBox = document.getElementById("resultBox");
 
-"Prediction: "+data.prediction+"<br>"+
-"Risk Score: "+data.risk_score+"<br>"+
-"ML Probability: "+data.ml_probability;
+resultBox.style.display="block";
+
+let resultHTML = `
+<b>Prediction:</b> ${data.prediction} <br>
+<b>Risk Score:</b> ${data.risk_score} <br>
+<b>ML Probability:</b> ${data.ml_probability} <br>
+<b>URLs Found:</b> ${data.num_urls}
+`;
+
+resultBox.innerHTML = resultHTML;
+
+if(data.prediction === "PHISHING"){
+resultBox.className="result phishing";
+}else{
+resultBox.className="result safe";
+}
 
 }
 
